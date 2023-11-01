@@ -15,7 +15,7 @@ jobs:
             speed: [slow, medium, all]
       
       - name: test
-        run: 
+        run: |
           echo "suite: ${{ steps.my-action.outputs.results.ci.suite1 }}"
           echo "speed: ${{ steps.my-action.outputs.results.speed }}"
 
