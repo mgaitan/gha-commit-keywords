@@ -7,11 +7,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:      
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-
       - uses: ./
         id: my-action
         with:
