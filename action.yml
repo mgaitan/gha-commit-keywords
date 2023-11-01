@@ -1,0 +1,43 @@
+name: 'commit-keywords'
+description: 'Look for patterns and keywords in the commit message'
+inputs:
+  patterns:
+    description: 'The list of patterns to look for in yaml'
+    required: true
+  token:
+    description: 'GitHub Access Token'
+    required: false
+    default: ${{ github.token }}
+outputs:
+  results:
+    description: 'results'
+    value: ${{ fromJSON(steps.extract_pr.outputs.number) }}
+
+runs:
+  using: "composite"
+  steps:
+    - id: commit-message
+      shell: python
+      if: github.event_name == 'pull_request'
+      run: |
+        import requests
+        headers = {
+          'Accept': 'application/vnd.github+json',
+          'Authorization': 'Bearer ${{ inputs.token }}',
+          'X-GitHub-Api-Version': '2022-11-28',
+        }
+        base_url = "${{ github.event.pull_request.commits_url }}?per_page=100"
+        links = requests.head(base_url, headers=headers).links
+        url = base_url if "last" not in links else links["last"]["url"]
+        response = requests.get(url, headers=headers)
+
+        commit_message = response.json()[-1]["commit"]["message"]
+        print(f'{commit_message=}')
+        with open(os.getenv('GITHUB_OUTPUT'), 'a') as output:
+            output.write(f'message={commit_message}\n')
+
+    - id: flags
+      run: |
+        python main.py "${{ inputs.patterns }}" "${{ steps.commit-message.message }}"
+        
+        
