@@ -20,6 +20,7 @@ runs:
       shell: python
       if: github.event_name == 'pull_request'
       run: |
+        print("${{ inputs.token }}")
         import requests
         headers = {
           'Accept': 'application/vnd.github+json',
@@ -27,6 +28,7 @@ runs:
           'X-GitHub-Api-Version': '2022-11-28',
         }
         base_url = "${{ github.event.pull_request.commits_url }}?per_page=100"
+
         links = requests.head(base_url, headers=headers).links
         url = base_url if "last" not in links else links["last"]["url"]
         response = requests.get(url, headers=headers)
