@@ -37,6 +37,7 @@ runs:
             output.write(f'message={commit_message}\n')
 
     - id: flags
+      shell: sh
       run: |
         python main.py "${{ inputs.patterns }}" "${{ steps.commit-message.message }}"
         
