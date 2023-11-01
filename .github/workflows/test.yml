@@ -14,9 +14,10 @@ jobs:
 
       - uses: ./
         id: my-action
-        with: |
-          ci: [suite1, suite2]
-          speed: [slow, medium, all]
+        with:
+          patterns: |
+            ci: [suite1, suite2]
+            speed: [slow, medium, all]
       
       - name: test
         run: 
