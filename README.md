@@ -1,2 +1,3 @@
 # gha-commit-keywords
-Look for patterns and keywords in commit message
+
+Look for patterns and keywords in the commit message
